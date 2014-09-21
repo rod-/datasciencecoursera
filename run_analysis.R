@@ -25,6 +25,7 @@ features<-read.table("UCI HAR Dataset//features.txt")
 colnames(merged)<-c("Subject","Activity",as.character(features$V2))
 rm(features)#again cleanup because of that silly V2 thing.  I could probably figure out a neater way.
 require(dplyr)
+require(reshape2)
 merged<-tbl_df(merged)
 ##hopefully this is where i bring it into dplyr and magic happens.
 fieldsiwant<-select(merged,Subject,Activity,contains("mean"),contains("std"),-contains("angle")) # piping doesnt work here, i have to use multiple selects, that's how that syntax works.  This is not an effective comment.
@@ -37,15 +38,14 @@ fieldsiwant<-tbl_df(fieldsiwant) #seems to not really still be a proper dplyr df
 select(fieldsiwant,Activity=Activity)
 #clean up the names
 names(fieldsiwant)<-gsub("\\(\\)","",names(fieldsiwant))
-#fieldsiwant<-select(fieldsiwant,-Activity)#get rid of that silly old Y variable
 names(fieldsiwant)<-gsub("^t","Time",names(fieldsiwant))
 names(fieldsiwant)<-gsub("^f","Freq",names(fieldsiwant))
 names(fieldsiwant)<-gsub("BodyBody","2Body",names(fieldsiwant))
 names(fieldsiwant)<-tolower(names(fieldsiwant))#decided that capitals aren't fun
 #yay names are understandable now (except BodyBody, but the readme doesn't explain that either...)
 moltuci<-melt(fieldsiwant,id.vars = c("activity","subject"))
-rm(fieldsiwant,merged,activitylabels)
+rm(fieldsiwant,merged,activitylabels,moltuci)
 ###THIS RESULT DATAFRAME IS THE STEP 5 RESULT### #everything else has been removed from the environment for cleanliness purposes###
 result<-dcast(moltuci, activity + subject ~ variable, mean)
-#writes the text file for upload
+#writes the text file for upload - this is the file submitted for course credit.
 write.table(file="JPUPCCP.txt",x = result,row.names=FALSE)
