@@ -6,9 +6,9 @@
 #Please upload the tidy data set created in step 5 of the instructions. Please upload your data set as a txt file created with write.table() using row.name=FALSE
 
 
-#temp <- tempfile()
-#download.file("http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",temp)
-#unzip(temp)
+temp <- tempfile()
+download.file("http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",temp)
+unzip(temp)
 ##this downlaods and unzips the file into the cwd.  Well it technically downloads into a temp folder and then unzips to the wd..whatever, more temp clutter.
 xt<-read.table("UCI HAR Dataset/test/X_test.txt")
 yt<-read.table("UCI HAR Dataset/test/Y_test.txt")
